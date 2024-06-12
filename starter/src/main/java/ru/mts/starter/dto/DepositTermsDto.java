@@ -1,9 +1,9 @@
-package ru.mts.starter.entity.dto;
+package ru.mts.starter.dto;
 
 import lombok.Data;
-import ru.mts.starter.entity.enums.DepositDurationEnum;
-import ru.mts.starter.entity.enums.DepositTypeEnum;
-import ru.mts.starter.entity.enums.PaymentPeriodEnum;
+import ru.mts.starter.enums.DepositDurationEnum;
+import ru.mts.starter.enums.DepositTypeEnum;
+import ru.mts.starter.enums.PaymentPeriodEnum;
 
 import java.math.BigDecimal;
 import java.util.Objects;

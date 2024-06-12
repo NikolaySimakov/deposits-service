@@ -1,3 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  ru.mts.account.properties.ScanConfiguration, ru.mts.deposit.properties.ScanConfiguration, \
-  ru.mts.customerservice.properties.ScanConfiguration, ru.mts.aggregator.properties.ScanConfiguration

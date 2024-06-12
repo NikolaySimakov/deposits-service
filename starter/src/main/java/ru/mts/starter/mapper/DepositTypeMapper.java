@@ -1,7 +1,7 @@
-package ru.mts.starter.entity.mapper;
+package ru.mts.starter.mapper;
 
 import ru.mts.starter.entity.DepositType;
-import ru.mts.starter.entity.dto.DepositTypeDto;
+import ru.mts.starter.dto.DepositTypeDto;
 
 public class DepositTypeMapper {
     public static DepositTypeDto toDto(DepositType dt) {

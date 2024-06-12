@@ -1,8 +1,8 @@
-package ru.mts.starter.entity.mapper;
+package ru.mts.starter.mapper;
 
 
 import ru.mts.starter.entity.RequestStatus;
-import ru.mts.starter.entity.dto.RequestStatusDto;
+import ru.mts.starter.dto.RequestStatusDto;
 
 public class RequestStatusMapper {
 

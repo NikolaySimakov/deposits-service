@@ -1,4 +1,4 @@
-package ru.mts.starter.entity.enums;
+package ru.mts.starter.enums;
 
 public enum RequestStatusEnum {
     CONFIRMATION,

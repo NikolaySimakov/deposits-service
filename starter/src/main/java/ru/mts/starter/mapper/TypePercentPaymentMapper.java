@@ -1,7 +1,7 @@
-package ru.mts.starter.entity.mapper;
+package ru.mts.starter.mapper;
 
 import ru.mts.starter.entity.TypePercentPayment;
-import ru.mts.starter.entity.dto.TypePercentPaymentDto;
+import ru.mts.starter.dto.TypePercentPaymentDto;
 
 public class TypePercentPaymentMapper {
 

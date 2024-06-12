@@ -1,0 +1,32 @@
+server:
+  port: 3000
+spring:
+  application:
+    name: aggregator
+  profiles:
+    active: example
+  thymeleaf:
+    cache: false
+    enabled: true
+    prefix: classpath:/templates/
+    suffix: .html
+    encoding: UTF-8
+    mode: HTML
+  datasource:
+    url: jdbc:postgresql://localhost:5432/deposits-service-db?useSSL=false
+    username: postgres
+    password: 314159263
+    driverClassName: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        ddl-auto: validate
+        show_sql: true
+    defer-datasource-initialization: false
+    show-sql: true
+  flyway:
+    user: postgres
+    password: 314159263
+    #    default-schema: animals
+    locations: classpath:migration
+    enabled: true

@@ -2,7 +2,7 @@ package ru.mts.starter.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import ru.mts.starter.entity.enums.RequestStatusEnum;
+import ru.mts.starter.enums.RequestStatusEnum;
 
 import java.util.Objects;
 

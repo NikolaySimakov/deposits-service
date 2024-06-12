@@ -50,7 +50,6 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$/deposit" />
-            <option value="$PROJECT_DIR$/deposit/starter" />
           </set>
         </option>
       </GradleProjectSettings>

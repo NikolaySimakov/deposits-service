@@ -1,7 +1,7 @@
-package ru.mts.starter.entity.dto;
+package ru.mts.starter.dto;
 
 import lombok.Data;
-import ru.mts.starter.entity.enums.PaymentPeriodEnum;
+import ru.mts.starter.enums.PaymentPeriodEnum;
 
 import java.util.Objects;
 

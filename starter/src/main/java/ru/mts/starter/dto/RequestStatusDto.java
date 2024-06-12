@@ -1,7 +1,7 @@
-package ru.mts.starter.entity.dto;
+package ru.mts.starter.dto;
 
 import lombok.Data;
-import ru.mts.starter.entity.enums.RequestStatusEnum;
+import ru.mts.starter.enums.RequestStatusEnum;
 
 import java.util.Objects;
 
