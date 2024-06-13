@@ -12,12 +12,12 @@ import java.util.Objects;
 public class BankAccount {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_bank_accounts")
     private Long id;
 
     @Column(name = "num_bank_accounts")
-    private BigDecimal numBankAccounts;
+    private Long numBankAccounts;
 
     @Column(name = "amount")
     private BigDecimal amount;

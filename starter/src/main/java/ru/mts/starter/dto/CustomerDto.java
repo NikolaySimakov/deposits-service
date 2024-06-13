@@ -1,40 +1,35 @@
-package ru.mts.starter.entity;
+package ru.mts.starter.dto;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
+
 @Data
-@Entity
-@Table(name = "customers")
-public class Customer {
+public class CustomerDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_customers")
     private Long id;
-
-    @Column(name = "phone_number")
+    private Long numBankAccounts;
+    private BigDecimal amount;
     private String phoneNumber;
 
-    @ManyToOne
-    @JoinColumn(name = "bank_account_id", referencedColumnName = "id_bank_accounts")
-    private BankAccount bankAccount;
-
-    public Customer(Long id, String phoneNumber) {
+    public CustomerDto(Long id, String phoneNumber, Long numBankAccounts, BigDecimal amount) {
         this.id = id;
+        this.numBankAccounts = numBankAccounts;
+        this.amount = amount;
         this.phoneNumber = phoneNumber;
     }
 
-    public Customer() {
+    public CustomerDto() {
     }
 
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
-        Customer that = (Customer) object;
+        CustomerDto that = (CustomerDto) object;
         return Objects.equals(phoneNumber, that.phoneNumber);
     }
 
@@ -45,9 +40,11 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "Customer{" +
+        return "CustomerDto{" +
                 "id=" + id +
                 ", phoneNumber=" + phoneNumber +
+                ", numBankAccounts=" + numBankAccounts +
+                ", amount=" + amount +
                 '}';
     }
 }
