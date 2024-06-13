@@ -49,6 +49,6 @@ public class TermsService {
     }
 
     public BigDecimal calculateRate() {
-        return new BigDecimal("");
+        return new BigDecimal("0.01");
     }
 }

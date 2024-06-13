@@ -4,6 +4,7 @@ package ru.mts.starter.dto;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
@@ -13,14 +14,14 @@ public class DepositDto {
     private Long id;
     private Boolean depositRefill;
     private BigDecimal depositsAmount;
-    private Date startDate;
-    private Date endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private BigDecimal depositRate;
-    private Date percentPaymentDate;
+    private LocalDate percentPaymentDate;
     private Boolean capitalization;
 
-    public DepositDto(Long id, Boolean depositRefill, BigDecimal depositsAmount, Date startDate,
-                      Date endDate, BigDecimal depositRate, Date percentPaymentDate, Boolean capitalization) {
+    public DepositDto(Long id, Boolean depositRefill, BigDecimal depositsAmount, LocalDate startDate,
+                      LocalDate endDate, BigDecimal depositRate, LocalDate percentPaymentDate, Boolean capitalization) {
         this.id = id;
         this.depositRefill = depositRefill;
         this.depositsAmount = depositsAmount;

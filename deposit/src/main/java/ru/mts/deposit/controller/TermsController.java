@@ -7,6 +7,7 @@ import ru.mts.starter.dto.DepositTypeDto;
 import ru.mts.starter.dto.RequestStatusDto;
 import ru.mts.starter.dto.TypePercentPaymentDto;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -38,5 +39,10 @@ public class TermsController {
     public void getTerms(@RequestBody DepositTermsDto depositTermsDto) {
         System.out.println(depositTermsDto);
         termsService.calculateRate();
+    }
+
+    @PostMapping("/deposit-rate")
+    public BigDecimal getDepositRate(@RequestBody DepositTermsDto depositTermsDto) {
+        return termsService.calculateRate();
     }
 }

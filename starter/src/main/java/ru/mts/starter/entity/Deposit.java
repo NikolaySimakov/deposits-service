@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
@@ -25,22 +26,22 @@ public class Deposit {
     private BigDecimal depositsAmount;
 
     @Column(name = "start_date")
-    private Date startDate;
+    private LocalDate startDate;
 
     @Column(name = "end_date")
-    private Date endDate;
+    private LocalDate endDate;
 
     @Column(name = "deposit_rate", precision = 4, scale = 2)
     private BigDecimal depositRate;
 
     @Column(name = "percent_payment_date")
-    private Date percentPaymentDate;
+    private LocalDate percentPaymentDate;
 
     @Column(name = "capitalization")
     private Boolean capitalization;
 
-    public Deposit(Long id, Boolean depositRefill, BigDecimal depositsAmount, Date startDate,
-                   Date endDate, BigDecimal depositRate, Date percentPaymentDate, Boolean capitalization) {
+    public Deposit(Long id, Boolean depositRefill, BigDecimal depositsAmount, LocalDate startDate,
+                   LocalDate endDate, BigDecimal depositRate, LocalDate percentPaymentDate, Boolean capitalization) {
         this.id = id;
         this.depositRefill = depositRefill;
         this.depositsAmount = depositsAmount;
