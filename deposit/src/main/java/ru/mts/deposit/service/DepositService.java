@@ -23,8 +23,8 @@ public class DepositService {
                 .collect(Collectors.toList());
     }
 
-    public void createNewDeposit() {
-
+    public void createNewDeposit(DepositDto deposit) {
+        depositRepository.save(DepositMapper.toModel(deposit));
     }
 
 }

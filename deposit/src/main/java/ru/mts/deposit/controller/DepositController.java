@@ -21,9 +21,9 @@ public class DepositController {
         return depositService.getDeposits();
     }
 
-    @PostMapping("/add")
+    @PostMapping("/new")
     public void createDeposit(@RequestBody DepositDto depositDto) {
-        depositService.createNewDeposit();
+        depositService.createNewDeposit(depositDto);
     }
 
 }
