@@ -23,7 +23,7 @@ public class DepositController {
 
     @PostMapping("/add")
     public void createDeposit(@RequestBody DepositDto depositDto) {
-
+        depositService.createNewDeposit();
     }
 
 }

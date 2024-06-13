@@ -23,4 +23,8 @@ public class DepositService {
                 .collect(Collectors.toList());
     }
 
+    public void createNewDeposit() {
+
+    }
+
 }
