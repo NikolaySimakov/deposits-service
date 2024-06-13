@@ -1,8 +1,8 @@
-package ru.mts.customerservice.dto;
+package ru.mts.starter.dto;
 
 import lombok.Data;
 
 @Data
-public class PhoneNumber {
+public class PhoneNumberDto {
     private String phoneNumber;
 }

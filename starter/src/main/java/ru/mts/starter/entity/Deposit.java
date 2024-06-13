@@ -14,7 +14,7 @@ import java.util.Objects;
 public class Deposit {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_deposit")
     private Long id;
 
@@ -59,7 +59,11 @@ public class Deposit {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         Deposit that = (Deposit) object;
-        return Objects.equals(depositRefill, that.depositRefill) && Objects.equals(depositsAmount, that.depositsAmount) && Objects.equals(startDate, that.startDate);
+        return Objects.equals(depositRefill, that.depositRefill) && Objects.equals(depositsAmount, that.depositsAmount)
+                && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate)
+                && Objects.equals(depositRate, that.depositRate)
+                && Objects.equals(percentPaymentDate, that.percentPaymentDate)
+                && Objects.equals(capitalization, that.capitalization);
     }
 
     @Override
