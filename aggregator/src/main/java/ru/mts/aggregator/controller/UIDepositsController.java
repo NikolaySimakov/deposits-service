@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.mts.aggregator.service.DepositService;
 import org.springframework.ui.Model;
+import ru.mts.starter.annotation.Logging;
 import ru.mts.starter.dto.DepositTermsDto;
 
 import java.util.Optional;
@@ -22,12 +23,14 @@ public class UIDepositsController {
     }
 
     @GetMapping("/deposits")
+    @Logging(value = "Get deposit", enter = true, exit = true, includeParams = true, includeResult = true)
     public String index(Model model) {
         model.addAttribute("depositsList", depositService.getDeposits());
         return "deposits";
     }
 
     @GetMapping("/terms")
+    @Logging(value = "Get terms", enter = true, exit = true, includeParams = true, includeResult = true)
     public String terms(Model model, @RequestParam("rate") Optional<String> rate) {
         model.addAttribute("depositTypesStr", depositService.getDepositTypes());
         model.addAttribute("depositDurationsStr", depositService.getDepositDurations());
@@ -38,6 +41,7 @@ public class UIDepositsController {
     }
 
     @PostMapping("/terms")
+    @Logging(value = "Get deposit rate", enter = true, exit = true, includeParams = true, includeResult = true)
     public String terms(@ModelAttribute("depositTerms") DepositTermsDto depositTermsDto) {
         try {
             String depositRate = depositService.getDepositRate(depositTermsDto);

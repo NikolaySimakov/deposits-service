@@ -3,6 +3,7 @@ package ru.mts.account.controller;
 import org.springframework.web.bind.annotation.*;
 import ru.mts.account.service.CustomerService;
 import ru.mts.account.service.SmsService;
+import ru.mts.starter.annotation.Logging;
 import ru.mts.starter.dto.SmsDto;
 
 @RestController
@@ -18,6 +19,7 @@ public class SmsController {
     }
 
     @PostMapping("/sms")
+    @Logging(value = "Get SMS", enter = true, exit = true, includeParams = true, includeResult = true)
     public SmsDto getSmsCode(@RequestParam String phoneNumber) {
         if (customerService.customerExists(phoneNumber)) {
             // Here some service for sms
@@ -29,6 +31,7 @@ public class SmsController {
     }
 
     @GetMapping("/verify")
+    @Logging(value = "Verify SMS", enter = true, exit = true, includeParams = true, includeResult = true)
     public boolean verifyCode(@RequestParam String code) {
         return smsService.isSmsActiveByCode(code);
     }

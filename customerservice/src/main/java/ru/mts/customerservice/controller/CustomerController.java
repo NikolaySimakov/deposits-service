@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.mts.customerservice.dto.ReplenishResponse;
 import ru.mts.customerservice.dto.ReplenishSum;
+import ru.mts.starter.annotation.Logging;
 import ru.mts.starter.dto.PhoneNumberDto;
 import ru.mts.customerservice.service.CustomerService;
 import ru.mts.starter.dto.CustomerDto;
@@ -27,22 +28,26 @@ public class CustomerController {
     }
 
     @GetMapping("/customers")
+    @Logging(value = "Get customers", enter = true, exit = true, includeParams = true, includeResult = true)
     public List<CustomerDto> getCustomers() {
         return customerService.getCustomers();
     }
 
     @PostMapping("/new")
+    @Logging(value = "Create new customer", enter = true, exit = true, includeParams = true, includeResult = true)
     public void addCustomer(@RequestBody CustomerDto customer) {
         customerService.addCustomer(customer);
     }
 
     @PostMapping("/verify")
+    @Logging(value = "Verify sms code", enter = true, exit = true, includeParams = true, includeResult = true)
     public Boolean verifyUserBySmsCode(@RequestParam String code) {
         return customerService.verifyCustomerBySmsCode(code);
     }
 
     @PostMapping("/deposit/new")
     @Transactional
+    @Logging(value = "Create new deposit", enter = true, exit = true, includeParams = true, includeResult = true)
     public ResponseEntity<?> createNewDeposit(@RequestParam String phone, @RequestBody DepositTermsDto depositTerms) {
         if (!customerService.validateDepositAmount(phone, depositTerms.getDepositSum())) {
             // Если валидация не прошла, возвращаем ошибку 400 с сообщением
@@ -58,6 +63,7 @@ public class CustomerController {
 
     @PostMapping("/deposit/replenish/{id}")
     @Transactional
+    @Logging(value = "Replenish deposit", enter = true, exit = true, includeParams = true, includeResult = true)
     public ResponseEntity<?> replenishDeposit(@PathVariable("id") long id, @RequestParam String phone,
                                               @RequestBody ReplenishSum replenishSum) {
         if (!customerService.validateDepositAmount(phone, replenishSum.getSum())) {
@@ -84,6 +90,7 @@ public class CustomerController {
 
     @PostMapping("/deposit/close/{id}")
     @Transactional
+    @Logging(value = "Close deposit", enter = true, exit = true, includeParams = true, includeResult = true)
     public ResponseEntity<?> closeDeposit(@PathVariable("id") long id, @RequestParam String phone) {
         try {
             BigDecimal depositAmount = customerService.subtractDepositAmount(id);

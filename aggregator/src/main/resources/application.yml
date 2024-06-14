@@ -27,8 +27,7 @@ spring:
   flyway:
     user: postgres
     password: 314159263
-    #    default-schema: animals
-    locations: classpath:migration
+#    locations: classpath:migration
     enabled: true
 
 apis:
