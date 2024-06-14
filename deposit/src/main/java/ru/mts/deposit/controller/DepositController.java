@@ -16,9 +16,14 @@ public class DepositController {
         this.depositService = depositService;
     }
 
-    @GetMapping("/deposits")
-    public List<DepositDto> getRequestStatuses() {
-        return depositService.getDeposits();
+    @GetMapping("/deposits/active")
+    public List<DepositDto> getActiveDeposits() {
+        return depositService.getActiveDeposits();
+    }
+
+    @GetMapping("/deposits/rejected")
+    public List<DepositDto> getRejectedDeposits() {
+        return depositService.getRejectedDeposits();
     }
 
     @PostMapping("/new")
@@ -26,4 +31,8 @@ public class DepositController {
         depositService.createNewDeposit(depositDto);
     }
 
+    @DeleteMapping("/delete/{id}")
+    public void deleteRejectedDeposit(@PathVariable("id") long id) {
+        depositService.deleteRejectedDepositById(id);
+    }
 }

@@ -17,7 +17,15 @@ public class DepositService {
         this.depositRepository = depositRepository;
     }
 
-    public List<DepositDto> getDeposits() {
+    public List<DepositDto> getActiveDeposits() {
+        // todo: fetch active
+        return depositRepository.findAll().stream()
+                .map(DepositMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    public List<DepositDto> getRejectedDeposits() {
+        // todo: fetch rejected
         return depositRepository.findAll().stream()
                 .map(DepositMapper::toDto)
                 .collect(Collectors.toList());
@@ -27,4 +35,7 @@ public class DepositService {
         depositRepository.save(DepositMapper.toModel(deposit));
     }
 
+    public void deleteRejectedDepositById(Long id) {
+        depositRepository.deleteById(id);
+    }
 }
