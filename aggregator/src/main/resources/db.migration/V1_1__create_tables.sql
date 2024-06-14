@@ -41,10 +41,10 @@ CREATE TABLE IF NOT EXISTS deposits (
                                         end_date DATE,
                                         deposit_rate DECIMAL(4, 2),
                                         type_percent_payment_id INTEGER REFERENCES types_percent_payment(id_type_percent_payment),
-                                        percent_payment_account_id INTEGER,
+                                        percent_payment_account_id INTEGER REFERENCES bank_accounts(id_bank_accounts),
                                         percent_payment_date DATE,
                                         capitalization BOOLEAN,
-                                        deposit_refund_account_id INTEGER
+                                        deposit_refund_account_id INTEGER REFERENCES bank_accounts(id_bank_accounts),
 );
 
 -- Создание таблицы customer_deposits

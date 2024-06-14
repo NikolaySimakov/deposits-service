@@ -27,7 +27,7 @@ spring:
   flyway:
     user: postgres
     password: 314159263
-#    locations: classpath:migration
+    locations: classpath:db/migration
     enabled: true
 
 apis:
