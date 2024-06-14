@@ -2,6 +2,7 @@ package ru.mts.customerservice.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -15,10 +16,7 @@ import ru.mts.starter.dto.DepositTermsDto;
 import ru.mts.starter.entity.*;
 import ru.mts.starter.enums.DepositDurationEnum;
 import ru.mts.starter.enums.PaymentPeriodEnum;
-import ru.mts.starter.mapper.BankAccountMapper;
-import ru.mts.starter.mapper.CustomerMapper;
-import ru.mts.starter.mapper.DepositTypeMapper;
-import ru.mts.starter.mapper.TypePercentPaymentMapper;
+import ru.mts.starter.mapper.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -85,10 +83,32 @@ public class CustomerService {
         return depositAmount.compareTo(currentAmount) <= 0;
     }
 
-    public BigDecimal subtractDepositAmount(String phone, BigDecimal depositAmount) {
-        Customer customer = customerRepository.findByPhoneNumber(phone);
+    public BigDecimal subtractDepositAmountFromBankAccount(String phone, BigDecimal depositAmount) {
+        Optional<Customer> customerOpt = customerRepository.findByPhoneNumber(phone);
+
+        if (customerOpt.isEmpty()) {
+            throw new EntityNotFoundException("Customer not found with phone: " + phone);
+        }
+
+        Customer customer = customerOpt.get();
         BankAccount bankAccount = customer.getBankAccount();
         BigDecimal newBalance = bankAccount.getAmount().subtract(depositAmount);
+        bankAccount.setAmount(newBalance);
+        customer.setBankAccount(bankAccount);
+        customerRepository.save(customer);
+        return newBalance;
+    }
+
+    public BigDecimal transferDepositAmountToBankAccount(String phone, BigDecimal depositAmount) {
+        Optional<Customer> customerOpt = customerRepository.findByPhoneNumber(phone);
+
+        if (customerOpt.isEmpty()) {
+            throw new EntityNotFoundException("Customer not found with phone: " + phone);
+        }
+
+        Customer customer = customerOpt.get();
+        BankAccount bankAccount = customer.getBankAccount();
+        BigDecimal newBalance = bankAccount.getAmount().add(depositAmount);
         bankAccount.setAmount(newBalance);
         customer.setBankAccount(bankAccount);
         customerRepository.save(customer);
@@ -104,10 +124,25 @@ public class CustomerService {
         return newBalance;
     }
 
+    public BigDecimal subtractDepositAmount(Long id) {
+        DepositDto depositDto = getDepositById(id);
+        BigDecimal depositSum = depositDto.getDepositsAmount();
+        BigDecimal newBalance = new BigDecimal("0");
+        depositDto.setDepositsAmount(newBalance);
+        saveDeposit(depositDto);
+        return depositSum;
+    }
+
     public void createDeposit(String phone, DepositTermsDto depositTerms) {
         DepositDto depositDto = new DepositDto();
 
-        Customer customer = customerRepository.findByPhoneNumber(phone);
+        Optional<Customer> customerOpt = customerRepository.findByPhoneNumber(phone);
+
+        if (customerOpt.isEmpty()) {
+            throw new EntityNotFoundException("Customer not found with phone: " + phone);
+        }
+
+        Customer customer = customerOpt.get();
         DepositType depositType = depositTypeRepository
                 .findByDepositsTypesName(depositTerms.getDepositType());
         TypePercentPayment typePercentPayment = typePercentPaymentRepository
@@ -132,6 +167,18 @@ public class CustomerService {
         depositDto.setDepositRate(getDepositRate(depositTerms));
 
         saveDeposit(depositDto);
+    }
+
+    public void deleteDepositById(Long id) {
+        RestClient restClient = RestClient.create();
+        try {
+            restClient.delete()
+                    .uri(depositAPI + "/delete/{id}", id)
+                    .retrieve()
+                    .toBodilessEntity();
+        } catch (Exception e) {
+            throw new RuntimeException("Error deleting deposit: " + e.getMessage());
+        }
     }
 
     private BigDecimal getDepositRate(DepositTermsDto depositTerms) {

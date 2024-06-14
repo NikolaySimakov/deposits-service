@@ -41,21 +41,22 @@ public class CustomerController {
         return customerService.verifyCustomerBySmsCode(code);
     }
 
-    @PostMapping("/new-deposit")
+    @PostMapping("/deposit/new")
     @Transactional
     public ResponseEntity<?> createNewDeposit(@RequestParam String phone, @RequestBody DepositTermsDto depositTerms) {
         if (!customerService.validateDepositAmount(phone, depositTerms.getDepositSum())) {
             // Если валидация не прошла, возвращаем ошибку 400 с сообщением
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Deposit amount exceeds the amount in the account");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("Deposit amount exceeds the amount in the account");
         }
 
         customerService.createDeposit(phone, depositTerms);
-        customerService.subtractDepositAmount(phone, depositTerms.getDepositSum());
+        customerService.subtractDepositAmountFromBankAccount(phone, depositTerms.getDepositSum());
 
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/replenish-deposit/{id}")
+    @PostMapping("/deposit/replenish/{id}")
     @Transactional
     public ResponseEntity<?> replenishDeposit(@PathVariable("id") long id, @RequestParam String phone,
                                               @RequestBody ReplenishSum replenishSum) {
@@ -70,13 +71,29 @@ public class CustomerController {
             BigDecimal updatedSum = customerService.replenishDeposit(id, replenishSum.getSum());
             replenishResponse.setUpdatedSum(updatedSum);
             replenishResponse.setDate(LocalDateTime.now());
+
+            customerService.subtractDepositAmountFromBankAccount(phone, replenishSum.getSum());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
 
-        customerService.subtractDepositAmount(phone, replenishSum.getSum());
-
         return ResponseEntity.ok().body(replenishResponse);
     }
 
+    @PostMapping("/deposit/close/{id}")
+    @Transactional
+    public ResponseEntity<?> closeDeposit(@PathVariable("id") long id, @RequestParam String phone) {
+        try {
+            BigDecimal depositAmount = customerService.subtractDepositAmount(id);
+            customerService.transferDepositAmountToBankAccount(phone, depositAmount);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+        try {
+            customerService.deleteDepositById(id);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
+        return ResponseEntity.ok().build();
+    }
 }

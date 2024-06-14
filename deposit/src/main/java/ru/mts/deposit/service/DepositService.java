@@ -49,7 +49,7 @@ public class DepositService {
         depositRepository.save(DepositMapper.toModel(deposit));
     }
 
-    public void deleteRejectedDepositById(Long id) {
+    public void deleteDepositById(Long id) {
         depositRepository.deleteById(id);
     }
 }

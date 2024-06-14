@@ -45,7 +45,7 @@ public class DepositController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteRejectedDeposit(@PathVariable("id") long id) {
-        depositService.deleteRejectedDepositById(id);
+    public void deleteDeposit(@PathVariable("id") long id) {
+        depositService.deleteDepositById(id);
     }
 }
