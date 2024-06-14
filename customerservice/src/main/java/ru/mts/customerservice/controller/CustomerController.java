@@ -73,8 +73,10 @@ public class CustomerController {
             replenishResponse.setDate(LocalDateTime.now());
 
             customerService.subtractDepositAmountFromBankAccount(phone, replenishSum.getSum());
-        } catch (Exception e) {
+        } catch (IllegalAccessException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
 
         return ResponseEntity.ok().body(replenishResponse);
@@ -87,7 +89,7 @@ public class CustomerController {
             BigDecimal depositAmount = customerService.subtractDepositAmount(id);
             customerService.transferDepositAmountToBankAccount(phone, depositAmount);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
         try {
             customerService.deleteDepositById(id);
