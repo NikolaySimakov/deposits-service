@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Минимальная высота, чтобы убедиться, что контент будет виден даже если он меньше высоты экрана */
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 50%; /* Можно изменить в зависимости от размера экрана */
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .button {
+            margin-top: 20px; /* Отступ сверху для кнопки */
+        }
+
+        .delete-button {
+            display: inline-block;
+            background-color: red;
+            color: white;
+            padding: 5px 10px;
+            text-align: center;
+            text-decoration: none;
+            font-size: 14px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        .add-button {
+            display: inline-block;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: bold;
+            transition-duration: 0.4s;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+        }
+
+        .add-button:hover {
+            background-color: #0056b3;
+            box-shadow: 0 12px 20px 0 rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <table>
+        <table>
+            <thead>
+            <tr>
+                <th>Refill</th>
+                <th>Amount</th>
+                <th>StartDate</th>
+                <th>EndDate</th>
+                <th>Rate</th>
+                <th>PercentPaymentDate</th>
+                <th>Capitalization</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="deposit : ${depositsList}">
+                <td th:text="${deposit.depositRefill}"></td>
+                <td th:text="${deposit.depositsAmount}"></td>
+                <td th:text="${deposit.startDate}"></td>
+                <td th:text="${deposit.endDate}"></td>
+                <td th:text="${deposit.depositRate}"></td>
+                <td th:text="${deposit.percentPaymentDate}"></td>
+                <td th:text="${deposit.capitalization}"></td>
+                <td><a class="delete-button" th:href="@{/delete/{id}(id=${deposit.id})}">Delete</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </table>
+    <div class="button">
+        <a href="/new" class="add-button">ADD</a>
+    </div>
+</div>
+</body>
+</html>
