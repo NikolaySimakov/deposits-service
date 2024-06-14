@@ -2,7 +2,6 @@ package ru.mts.customerservice.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -15,8 +14,8 @@ import ru.mts.starter.dto.DepositDto;
 import ru.mts.starter.dto.DepositTermsDto;
 import ru.mts.starter.entity.*;
 import ru.mts.starter.enums.DepositDurationEnum;
-import ru.mts.starter.enums.DepositTypeEnum;
 import ru.mts.starter.enums.PaymentPeriodEnum;
+import ru.mts.starter.exceptions.InvalidDepositException;
 import ru.mts.starter.mapper.*;
 
 import java.math.BigDecimal;
@@ -117,8 +116,12 @@ public class CustomerService {
         return newBalance;
     }
 
-    public BigDecimal replenishDeposit(Long id, BigDecimal sum) throws IllegalAccessException {
+    public BigDecimal replenishDeposit(Long id, BigDecimal sum) throws Exception {
         DepositDto depositDto = getDepositById(id);
+
+        if (sum.compareTo(new BigDecimal("0")) < 0) {
+            throw new InvalidDepositException("Sum is negative");
+        }
 
         switch (depositDto.getDepositType().getDepositsTypesName()) {
             case DEPOSIT_ONLY:
@@ -142,7 +145,12 @@ public class CustomerService {
         return depositSum;
     }
 
-    public void createDeposit(String phone, DepositTermsDto depositTerms) {
+    public void createDeposit(String phone, DepositTermsDto depositTerms)
+            throws InvalidDepositException, EntityNotFoundException, Exception {
+
+        if (depositTerms.getDepositSum().compareTo(new BigDecimal("10000")) < 0) {
+            throw new InvalidDepositException("Deposit < 10000 error");
+        }
         DepositDto depositDto = new DepositDto();
 
         Optional<Customer> customerOpt = customerRepository.findByPhoneNumber(phone);

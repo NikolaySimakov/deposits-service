@@ -1,6 +1,11 @@
 package ru.mts.starter.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -16,12 +21,26 @@ public class DepositDto {
     private DepositTypeDto depositType; // Simplified version of DepositType
     private Boolean depositRefill;
     private BigDecimal depositsAmount;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate startDate;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate endDate;
+
     private BigDecimal depositRate;
     private TypePercentPaymentDto typePercentPayment; // Simplified version of TypePercentPayment
     private BankAccountDto percentPaymentAccount; // Simplified version of BankAccount
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonSerialize(using = LocalDateSerializer.class)
+    @JsonDeserialize(using = LocalDateDeserializer.class)
     private LocalDate percentPaymentDate;
+
     private Boolean capitalization;
     private BankAccountDto depositRefundAccount; // Simplified version of BankAccount
 

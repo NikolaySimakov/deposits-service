@@ -1,6 +1,8 @@
 package ru.mts.aggregator.controller;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -12,6 +14,7 @@ import ru.mts.starter.annotation.Logging;
 import ru.mts.starter.dto.DepositTermsDto;
 
 import java.util.Optional;
+
 
 @Controller
 public class UIDepositsController {
@@ -31,12 +34,14 @@ public class UIDepositsController {
 
     @GetMapping("/terms")
     @Logging(value = "Get terms", enter = true, exit = true, includeParams = true, includeResult = true)
-    public String terms(Model model, @RequestParam("rate") Optional<String> rate) {
+    public String terms(Model model, @RequestParam(name = "rate", required = false) String rate) {
         model.addAttribute("depositTypesStr", depositService.getDepositTypes());
         model.addAttribute("depositDurationsStr", depositService.getDepositDurations());
         model.addAttribute("typesPercentPeriodsStr", depositService.getTypesPercentPeriods());
         model.addAttribute("depositTerms", new DepositTermsDto());
-        rate.ifPresent(s -> model.addAttribute("rate", s));
+        if (rate != null && !rate.isEmpty()) {
+            model.addAttribute("rate", rate);
+        }
         return "terms";
     }
 

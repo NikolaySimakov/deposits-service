@@ -1,5 +1,6 @@
 package ru.mts.customerservice.controller;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -55,8 +56,14 @@ public class CustomerController {
                     .body("Deposit amount exceeds the amount in the account");
         }
 
-        customerService.createDeposit(phone, depositTerms);
-        customerService.subtractDepositAmountFromBankAccount(phone, depositTerms.getDepositSum());
+        try {
+            customerService.createDeposit(phone, depositTerms);
+            customerService.subtractDepositAmountFromBankAccount(phone, depositTerms.getDepositSum());
+        } catch (IllegalAccessException | InvalidDepositException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
 
         return ResponseEntity.ok().build();
     }

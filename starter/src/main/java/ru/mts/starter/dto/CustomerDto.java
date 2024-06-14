@@ -30,12 +30,14 @@ public class CustomerDto {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
         CustomerDto that = (CustomerDto) object;
-        return Objects.equals(phoneNumber, that.phoneNumber);
+        return Objects.equals(phoneNumber, that.phoneNumber)
+                && Objects.equals(numBankAccounts, that.numBankAccounts)
+                && Objects.equals(amount, that.amount);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(phoneNumber);
+        return Objects.hash(numBankAccounts, phoneNumber, amount);
     }
 
     @Override
