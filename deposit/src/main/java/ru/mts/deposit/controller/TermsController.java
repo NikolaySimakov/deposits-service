@@ -37,12 +37,11 @@ public class TermsController {
 
     @PostMapping("/terms")
     public void getTerms(@RequestBody DepositTermsDto depositTermsDto) {
-        System.out.println(depositTermsDto);
-        termsService.calculateRate();
+
     }
 
     @PostMapping("/deposit-rate")
     public BigDecimal getDepositRate(@RequestBody DepositTermsDto depositTermsDto) {
-        return termsService.calculateRate();
+        return termsService.calculateRate(depositTermsDto);
     }
 }
