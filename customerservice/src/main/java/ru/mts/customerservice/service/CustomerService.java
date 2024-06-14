@@ -1,5 +1,6 @@
 package ru.mts.customerservice.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -93,9 +94,15 @@ public class CustomerService {
         customerRepository.save(customer);
     }
 
-    public void createDeposit(String phone, DepositTermsDto depositTerms) {
-        RestClient restClient = RestClient.create();
+    public void replenishDeposit(Long id, BigDecimal sum) {
+        DepositDto depositDto = getDepositById(id);
+        BigDecimal depositSum = depositDto.getDepositsAmount();
+        BigDecimal newBalance = depositSum.add(sum);
+        depositDto.setDepositsAmount(newBalance);
+        saveDeposit(depositDto);
+    }
 
+    public void createDeposit(String phone, DepositTermsDto depositTerms) {
         DepositDto depositDto = new DepositDto();
 
         Customer customer = customerRepository.findByPhoneNumber(phone);
@@ -122,13 +129,7 @@ public class CustomerService {
         depositDto.setCapitalization(depositTerms.getCapitalization());
         depositDto.setDepositRate(getDepositRate(depositTerms));
 
-
-        ResponseEntity<Void> response = restClient.post()
-                .uri(depositAPI + "/new")
-                .contentType(APPLICATION_JSON)
-                .body(depositDto)
-                .retrieve()
-                .toBodilessEntity();
+        saveDeposit(depositDto);
     }
 
     private BigDecimal getDepositRate(DepositTermsDto depositTerms) {
@@ -141,6 +142,30 @@ public class CustomerService {
                 .toEntity(BigDecimal.class);
 
         return response.getBody();
+    }
+
+    private DepositDto getDepositById(Long id) {
+        RestClient restClient = RestClient.create();
+        ResponseEntity<DepositDto> response = restClient.get()
+                .uri(depositAPI + "/deposit/{id}", id)
+                .retrieve()
+                .toEntity(DepositDto.class);
+
+        if (response.hasBody() && response.getStatusCode().is2xxSuccessful()) {
+            return response.getBody();
+        } else {
+            throw new EntityNotFoundException("Deposit not found");
+        }
+    }
+
+    private void saveDeposit(DepositDto depositDto) {
+        RestClient restClient = RestClient.create();
+        ResponseEntity<Void> response = restClient.post()
+                .uri(depositAPI + "/new")
+                .contentType(APPLICATION_JSON)
+                .body(depositDto)
+                .retrieve()
+                .toBodilessEntity();
     }
 
     private LocalDate getDepositEndDate(DepositDurationEnum selectedDuration) {
