@@ -15,12 +15,14 @@ import ru.mts.starter.dto.DepositDto;
 import ru.mts.starter.dto.DepositTermsDto;
 import ru.mts.starter.entity.*;
 import ru.mts.starter.enums.DepositDurationEnum;
+import ru.mts.starter.enums.DepositTypeEnum;
 import ru.mts.starter.enums.PaymentPeriodEnum;
 import ru.mts.starter.mapper.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -115,13 +117,20 @@ public class CustomerService {
         return newBalance;
     }
 
-    public BigDecimal replenishDeposit(Long id, BigDecimal sum) {
+    public BigDecimal replenishDeposit(Long id, BigDecimal sum) throws IllegalAccessException {
         DepositDto depositDto = getDepositById(id);
-        BigDecimal depositSum = depositDto.getDepositsAmount();
-        BigDecimal newBalance = depositSum.add(sum);
-        depositDto.setDepositsAmount(newBalance);
-        saveDeposit(depositDto);
-        return newBalance;
+
+        switch (depositDto.getDepositType().getDepositsTypesName()) {
+            case DEPOSIT_ONLY:
+            case DEPOSIT_WITHDRAWAL:
+                BigDecimal depositSum = depositDto.getDepositsAmount();
+                BigDecimal newBalance = depositSum.add(sum);
+                depositDto.setDepositsAmount(newBalance);
+                saveDeposit(depositDto);
+                return newBalance;
+            default:
+                throw new IllegalAccessException("Deposit cannot be replenished");
+        }
     }
 
     public BigDecimal subtractDepositAmount(Long id) {
