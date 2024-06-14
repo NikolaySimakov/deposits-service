@@ -1,5 +1,6 @@
 package ru.mts.customerservice.service;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
@@ -34,6 +35,12 @@ public class CustomerService {
     private final TypePercentPaymentRepository typePercentPaymentRepository;
     private final DepositTypeRepository depositTypeRepository;
 
+    @Value("${apis.account}")
+    private String accountAPI;
+
+    @Value("${apis.deposit}")
+    private String depositAPI;
+
     public CustomerService(CustomerRepository customerRepository, BankAccountRepository bankAccountRepository, TypePercentPaymentRepository typePercentPaymentRepository, DepositTypeRepository depositTypeRepository) {
         this.customerRepository = customerRepository;
         this.bankAccountRepository = bankAccountRepository;
@@ -63,7 +70,7 @@ public class CustomerService {
 
         RestClient restClient = RestClient.create();
         ResponseEntity<Boolean> result = restClient.get()
-                .uri("http://localhost:3001/api/verify?code={code}", code)
+                .uri(accountAPI + "/verify?code={code}", code)
                 .retrieve()
                 .toEntity(Boolean.class);
 
@@ -117,7 +124,7 @@ public class CustomerService {
 
 
         ResponseEntity<Void> response = restClient.post()
-                .uri("http://localhost:3003/api/new")
+                .uri(depositAPI + "/new")
                 .contentType(APPLICATION_JSON)
                 .body(depositDto)
                 .retrieve()
@@ -127,7 +134,7 @@ public class CustomerService {
     private BigDecimal getDepositRate(DepositTermsDto depositTerms) {
         RestClient restClient = RestClient.create();
         ResponseEntity<BigDecimal> response = restClient.post()
-                .uri("http://localhost:3003/api/deposit-rate")
+                .uri(depositAPI + "/deposit-rate")
                 .contentType(APPLICATION_JSON)
                 .body(depositTerms)
                 .retrieve()

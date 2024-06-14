@@ -30,3 +30,7 @@ spring:
     #    default-schema: animals
     locations: classpath:migration
     enabled: true
+
+apis:
+  account: "http://localhost:3001/api"
+  deposit: "http://localhost:3003/api"
