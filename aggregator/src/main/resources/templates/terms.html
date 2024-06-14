@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Terms</title>
+</head>
+<body>
+<h1>Deposit Terms</h1>
+
+<form action="#" th:action="@{/terms}" method="post" th:object="${depositTerms}">
+
+    <div>
+        <label for="amount">Amount:</label>
+        <input type="number" step="0.01" id="amount" name="amount" placeholder="Enter amount" th:field="*{depositSum}">
+    </div>
+
+    <div>
+        <label for="depositTypes">Deposit Types:</label>
+        <select id="depositTypes" name="depositTypes" th:field="*{depositType}">
+            <option value="">Select...</option>
+            <option th:each="type : ${depositTypesStr}"
+                    th:value="${type}" th:text="${type}"></option>
+        </select>
+    </div>
+
+    <div>
+        <label for="depositDurations">Deposit Durations:</label>
+        <select id="depositDurations" name="depositDurations" th:field="*{depositDuration}">
+            <option value="">Select...</option>
+            <option th:each="duration : ${depositDurationsStr}"
+                    th:value="${duration}" th:text="${duration}"></option>
+        </select>
+    </div>
+
+    <div>
+        <label for="percentPeriods">Percent Periods:</label>
+        <select id="percentPeriods" name="percentPeriods" th:field="*{paymentPeriod}">
+            <option value="">Select...</option>
+            <option th:each="period : ${typesPercentPeriodsStr}"
+                    th:value="${period}" th:text="${period}"></option>
+        </select>
+    </div>
+
+    <div>
+        <label for="capitalization">Capitalization:</label>
+        <input type="checkbox" id="capitalization" name="capitalization" th:checked="${capitalization}" />
+    </div>
+
+    <div th:text="${rate}"></div>
+
+    <button type="submit">Calculate</button>
+</form>
+
+</body>
+</html>

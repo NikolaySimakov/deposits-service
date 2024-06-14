@@ -41,15 +41,21 @@ public class TermsService {
                 .collect(Collectors.toList());
     }
 
-    public List<DepositTypeDto> getDepositTypes() {
+    public List<String> getDepositTypes() {
         return depositTypeRepository.findAll().stream()
-                .map(DepositTypeMapper::toDto)
+                .map(depositType -> depositType.getDepositsTypesName().name())
                 .collect(Collectors.toList());
     }
 
-    public List<TypePercentPaymentDto> getTypePercentPayments() {
+    public List<String> getDepositDurations() {
+        return List.of(DepositDurationEnum.MONTH_3.name(),
+                DepositDurationEnum.MONTH_6.name(),
+                DepositDurationEnum.YEAR.name());
+    }
+
+    public List<String> getTypePercentPayments() {
         return typePercentPaymentRepository.findAll().stream()
-                .map(TypePercentPaymentMapper::toDto)
+                .map(depositType -> depositType.getTypePercentPaymentPeriod().name())
                 .collect(Collectors.toList());
     }
 

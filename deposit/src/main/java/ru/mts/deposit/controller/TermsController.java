@@ -6,6 +6,7 @@ import ru.mts.starter.dto.DepositTermsDto;
 import ru.mts.starter.dto.DepositTypeDto;
 import ru.mts.starter.dto.RequestStatusDto;
 import ru.mts.starter.dto.TypePercentPaymentDto;
+import ru.mts.starter.enums.DepositDurationEnum;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -26,12 +27,17 @@ public class TermsController {
     }
 
     @GetMapping("/deposit-types")
-    public List<DepositTypeDto> getDepositTypes() {
+    public List<String> getDepositTypes() {
         return termsService.getDepositTypes();
     }
 
+    @GetMapping("/deposit-durations")
+    public List<String> getDepositDurations() {
+        return termsService.getDepositDurations();
+    }
+
     @GetMapping("/types-percent-period")
-    public List<TypePercentPaymentDto> getTypePercentPeriod() {
+    public List<String> getTypePercentPeriod() {
         return termsService.getTypePercentPayments();
     }
 

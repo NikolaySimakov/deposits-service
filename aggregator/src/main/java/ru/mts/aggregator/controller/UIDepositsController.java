@@ -3,8 +3,14 @@ package ru.mts.aggregator.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.mts.aggregator.service.DepositService;
 import org.springframework.ui.Model;
+import ru.mts.starter.dto.DepositTermsDto;
+
+import java.util.Optional;
 
 @Controller
 public class UIDepositsController {
@@ -19,6 +25,26 @@ public class UIDepositsController {
     public String index(Model model) {
         model.addAttribute("depositsList", depositService.getDeposits());
         return "deposits";
+    }
+
+    @GetMapping("/terms")
+    public String terms(Model model, @RequestParam("rate") Optional<String> rate) {
+        model.addAttribute("depositTypesStr", depositService.getDepositTypes());
+        model.addAttribute("depositDurationsStr", depositService.getDepositDurations());
+        model.addAttribute("typesPercentPeriodsStr", depositService.getTypesPercentPeriods());
+        model.addAttribute("depositTerms", new DepositTermsDto());
+        rate.ifPresent(s -> model.addAttribute("rate", s));
+        return "terms";
+    }
+
+    @PostMapping("/terms")
+    public String terms(@ModelAttribute("depositTerms") DepositTermsDto depositTermsDto) {
+        try {
+            String depositRate = depositService.getDepositRate(depositTermsDto);
+            return "redirect:/terms?rate=" + depositRate;
+        } catch (Exception e) {
+            return "redirect:/terms";
+        }
     }
 
 }
