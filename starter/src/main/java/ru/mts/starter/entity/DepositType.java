@@ -20,6 +20,10 @@ public class DepositType {
     @Enumerated(EnumType.STRING)
     private DepositTypeEnum depositsTypesName;
 
+    public DepositType(Long id) {
+        this.id = id;
+    }
+
     public DepositType(Long id, DepositTypeEnum depositsTypesName) {
         this.id = id;
         this.depositsTypesName = depositsTypesName;

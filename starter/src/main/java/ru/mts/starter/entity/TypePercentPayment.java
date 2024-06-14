@@ -20,6 +20,10 @@ public class TypePercentPayment {
     @Enumerated(EnumType.STRING)
     private PaymentPeriodEnum typePercentPaymentPeriod;
 
+    public TypePercentPayment(Long id) {
+        this.id = id;
+    }
+
     public TypePercentPayment(Long id, PaymentPeriodEnum typePercentPaymentPeriod) {
         this.id = id;
         this.typePercentPaymentPeriod = typePercentPaymentPeriod;

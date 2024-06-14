@@ -1,41 +1,32 @@
-package ru.mts.starter.entity;
+package ru.mts.starter.dto;
 
-import jakarta.persistence.*;
+
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Objects;
 
 @Data
-@Entity
-@Table(name = "bank_accounts")
-public class BankAccount {
+public class BankAccountDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_bank_accounts")
     private Long id;
-
-    @Column(name = "num_bank_accounts")
     private Long numBankAccounts;
-
-    @Column(name = "amount")
     private BigDecimal amount;
 
-    public BankAccount(Long id, Long numBankAccounts, BigDecimal amount) {
+    public BankAccountDto(Long id, Long numBankAccounts, BigDecimal amount) {
         this.id = id;
         this.numBankAccounts = numBankAccounts;
         this.amount = amount;
     }
 
-    public BankAccount() {
+    public BankAccountDto() {
     }
 
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
         if (object == null || getClass() != object.getClass()) return false;
-        BankAccount that = (BankAccount) object;
+        BankAccountDto that = (BankAccountDto) object;
         return Objects.equals(numBankAccounts, that.numBankAccounts) &&
                 Objects.equals(amount, that.amount);
     }
@@ -47,7 +38,7 @@ public class BankAccount {
 
     @Override
     public String toString() {
-        return "BankAccount{" +
+        return "BankAccountDto{" +
                 "id=" + id +
                 ", numBankAccounts=" + numBankAccounts +
                 ", amount=" + amount +

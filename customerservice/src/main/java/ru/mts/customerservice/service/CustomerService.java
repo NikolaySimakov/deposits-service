@@ -5,19 +5,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
 import ru.mts.starter.dao.BankAccountRepository;
 import ru.mts.starter.dao.CustomerRepository;
+import ru.mts.starter.dao.DepositTypeRepository;
+import ru.mts.starter.dao.TypePercentPaymentRepository;
 import ru.mts.starter.dto.CustomerDto;
 import ru.mts.starter.dto.DepositDto;
 import ru.mts.starter.dto.DepositTermsDto;
-import ru.mts.starter.entity.BankAccount;
-import ru.mts.starter.entity.Customer;
-import ru.mts.starter.entity.Request;
+import ru.mts.starter.entity.*;
 import ru.mts.starter.enums.DepositDurationEnum;
 import ru.mts.starter.enums.PaymentPeriodEnum;
+import ru.mts.starter.mapper.BankAccountMapper;
 import ru.mts.starter.mapper.CustomerMapper;
+import ru.mts.starter.mapper.DepositTypeMapper;
+import ru.mts.starter.mapper.TypePercentPaymentMapper;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -27,10 +31,14 @@ public class CustomerService {
 
     private final CustomerRepository customerRepository;
     private final BankAccountRepository bankAccountRepository;
+    private final TypePercentPaymentRepository typePercentPaymentRepository;
+    private final DepositTypeRepository depositTypeRepository;
 
-    public CustomerService(CustomerRepository customerRepository, BankAccountRepository bankAccountRepository) {
+    public CustomerService(CustomerRepository customerRepository, BankAccountRepository bankAccountRepository, TypePercentPaymentRepository typePercentPaymentRepository, DepositTypeRepository depositTypeRepository) {
         this.customerRepository = customerRepository;
         this.bankAccountRepository = bankAccountRepository;
+        this.typePercentPaymentRepository = typePercentPaymentRepository;
+        this.depositTypeRepository = depositTypeRepository;
     }
 
     public List<CustomerDto> getCustomers() {
@@ -82,6 +90,20 @@ public class CustomerService {
         RestClient restClient = RestClient.create();
 
         DepositDto depositDto = new DepositDto();
+
+        Customer customer = customerRepository.findByPhoneNumber(phone);
+        DepositType depositType = depositTypeRepository
+                .findByDepositsTypesName(depositTerms.getDepositType());
+        TypePercentPayment typePercentPayment = typePercentPaymentRepository
+                .findByTypePercentPaymentPeriod(depositTerms.getPaymentPeriod());
+
+
+        // set ids
+        depositDto.setDepositAccount(BankAccountMapper.toDto(customer.getBankAccount()));
+        depositDto.setPercentPaymentAccount(BankAccountMapper.toDto(customer.getBankAccount()));
+        depositDto.setDepositRefundAccount(BankAccountMapper.toDto(customer.getBankAccount()));
+        depositDto.setTypePercentPayment(TypePercentPaymentMapper.toDto(typePercentPayment));
+        depositDto.setDepositType(DepositTypeMapper.toDto(depositType));
 
         // deposit settings
         depositDto.setDepositRefill(false);

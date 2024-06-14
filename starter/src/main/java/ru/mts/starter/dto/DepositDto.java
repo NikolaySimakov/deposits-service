@@ -12,16 +12,24 @@ import java.util.Objects;
 public class DepositDto {
 
     private Long id;
+    private BankAccountDto depositAccount; // Simplified version of BankAccount
+    private DepositTypeDto depositType; // Simplified version of DepositType
     private Boolean depositRefill;
     private BigDecimal depositsAmount;
     private LocalDate startDate;
     private LocalDate endDate;
     private BigDecimal depositRate;
+    private TypePercentPaymentDto typePercentPayment; // Simplified version of TypePercentPayment
+    private BankAccountDto percentPaymentAccount; // Simplified version of BankAccount
     private LocalDate percentPaymentDate;
     private Boolean capitalization;
+    private BankAccountDto depositRefundAccount; // Simplified version of BankAccount
 
-    public DepositDto(Long id, Boolean depositRefill, BigDecimal depositsAmount, LocalDate startDate,
-                      LocalDate endDate, BigDecimal depositRate, LocalDate percentPaymentDate, Boolean capitalization) {
+    public DepositDto(Long id, Long depositAccountId, Long depositTypeId,
+                      Boolean depositRefill, BigDecimal depositsAmount, LocalDate startDate,
+                      LocalDate endDate, BigDecimal depositRate, Long typePercentPaymentId,
+                      Long percentPaymentAccountId, LocalDate percentPaymentDate, Boolean capitalization,
+                      Long depositRefundAccountId) {
         this.id = id;
         this.depositRefill = depositRefill;
         this.depositsAmount = depositsAmount;
@@ -53,13 +61,18 @@ public class DepositDto {
     public String toString() {
         return "DepositDto{" +
                 "id=" + id +
+                ", depositAccount=" + depositAccount.toString() +
+                ", depositType=" + depositType.toString() +
                 ", depositRefill=" + depositRefill +
                 ", depositsAmount=" + depositsAmount +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
                 ", depositRate=" + depositRate +
+                ", typePercentPayment=" + typePercentPayment.toString() +
+                ", percentPaymentAccount=" + percentPaymentAccount.toString() +
                 ", percentPaymentDate=" + percentPaymentDate +
                 ", capitalization=" + capitalization +
+                ", depositRefundAccount=" + depositRefundAccount.toString() +
                 '}';
     }
 
