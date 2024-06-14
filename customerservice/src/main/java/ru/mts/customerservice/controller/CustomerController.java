@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.mts.customerservice.dto.ReplenishResponse;
 import ru.mts.customerservice.dto.ReplenishSum;
 import ru.mts.starter.dto.PhoneNumberDto;
 import ru.mts.customerservice.service.CustomerService;
@@ -11,6 +12,8 @@ import ru.mts.starter.dto.CustomerDto;
 import ru.mts.starter.dto.DepositTermsDto;
 import ru.mts.starter.exceptions.InvalidDepositException;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -61,15 +64,19 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("There are insufficient funds in the account");
         }
 
+        ReplenishResponse replenishResponse = new ReplenishResponse();
+
         try {
-            customerService.replenishDeposit(id, replenishSum.getSum());
+            BigDecimal updatedSum = customerService.replenishDeposit(id, replenishSum.getSum());
+            replenishResponse.setUpdatedSum(updatedSum);
+            replenishResponse.setDate(LocalDateTime.now());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
 
         customerService.subtractDepositAmount(phone, replenishSum.getSum());
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(replenishResponse);
     }
 
 }

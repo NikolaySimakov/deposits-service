@@ -85,21 +85,23 @@ public class CustomerService {
         return depositAmount.compareTo(currentAmount) <= 0;
     }
 
-    public void subtractDepositAmount(String phone, BigDecimal depositAmount) {
+    public BigDecimal subtractDepositAmount(String phone, BigDecimal depositAmount) {
         Customer customer = customerRepository.findByPhoneNumber(phone);
         BankAccount bankAccount = customer.getBankAccount();
         BigDecimal newBalance = bankAccount.getAmount().subtract(depositAmount);
         bankAccount.setAmount(newBalance);
         customer.setBankAccount(bankAccount);
         customerRepository.save(customer);
+        return newBalance;
     }
 
-    public void replenishDeposit(Long id, BigDecimal sum) {
+    public BigDecimal replenishDeposit(Long id, BigDecimal sum) {
         DepositDto depositDto = getDepositById(id);
         BigDecimal depositSum = depositDto.getDepositsAmount();
         BigDecimal newBalance = depositSum.add(sum);
         depositDto.setDepositsAmount(newBalance);
         saveDeposit(depositDto);
+        return newBalance;
     }
 
     public void createDeposit(String phone, DepositTermsDto depositTerms) {
